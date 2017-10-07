@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <title>Fast Error Check</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <fieldset>
+            <legend>Ricerca Errore ANPR</legend>
+            <form id="errorCheck">
+                <div>
+                    <input id="codice" name="code" placeholder="Inserire qui il codice di errore" required="" autofocus="" type="text">
+                    <button type="submit">Cerca</button>
+                </div>
+            </form>
+            <br>
+            <div id="errore" hidden="">Errore: il codice cercato non è stato trovato</div>
+            <table id="out_table" hidden="">
+                <thead>
+                    <tr>
+                        <th>Codice Errore</th>
+                        <th>Descrizione</th>
+                        <th>Tabella Riferimento</th>
+                        <th>Subentro - Severità</th>
+                        <th>Subentro - Note</th>
+                        <th>Servizi - Severità</th>
+                        <th>Servizi - Note</th>
+                        <th>Ultima Variazione</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="code"></td>
+                        <td id="desc"></td>
+                        <td id="ref_table"></td>
+                        <td id="sub_severity"></td>
+                        <td id="sub_note"></td>
+                        <td id="serv_severity"></td>
+                        <td id="serv_note"></td>
+                        <td id="last_var"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </fieldset>
+		<script>
+            document.getElementById("errorCheck").addEventListener('submit', function (event) {
+                event.preventDefault();
+                check();
+            });
+            async function check() {
+                var urlPHP = "http://130.162.71.133/anpr-error-search/search_error.php?code=" + document.getElementById("codice").value;
+                var response = await fetch(urlPHP);
+                var resp = await response.json();
+                if (resp.result == 1) {
+                    document.getElementById("out_table").hidden = 0;
+					document.getElementById("errore").hidden = 1;
+                    for (var item in resp.data) {
+                        document.getElementById(item).innerHTML = resp.data[item];
+                    }
+                } else {
+                    document.getElementById("out_table").hidden = 1;
+					document.getElementById("errore").hidden = 0;
+                }
+                return false;
+            }</script>
+</body></html>
