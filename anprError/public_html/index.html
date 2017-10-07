@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Fast Error Check</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- <link href="newcss.css" rel="stylesheet" type="text/css"/> -->
+        <script>
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                console.log(this.status);
+                if (/*this.readyState == 4 &&*/ this.status === 200) {
+                    console.log("3");
+                    //console.log(this.response);
+
+                    var myObj = JSON.parse('{"result":0}');
+                    document.getElementById("out_table").hidden = "false";
+                    document.getElementById("out_table").innerHTML = myObj.name;
+                }
+            };
+            function check() {
+            console.log(document.getElementById("codice").value);
+            var urlPHP = "http://130.162.71.133/anpr-error-search/search_error.php?code=" + document.getElementById("codice").value;
+            xmlhttp.open("GET", urlPHP, true);
+            xmlhttp.send();
+            };
+        </script>
+    </head>
+    <body >
+        <form id="errorCheck">
+            <fieldset>
+                <legend>Ricerca Errore ANPR</legend>
+                <div>
+                    <input id="codice" name="code" type="text" placeholder="Inserire qui il codice di errore" required autofocus>
+                    <input  type="button" value="Cerca" onclick="check()">
+                </div>
+                <br>
+                <output form="returnedError" name="returnedValue" for="errorCode"></output>
+            </fieldset>
+        </form>
+        <table id="out_table" hidden="true">
+            <thead>
+                <tr>
+                    <th>Codice Errore</th>
+                    <th>Descrizione</th>
+                    <th>Tabella Riferimento</th>
+                    <th>Subentro - Severit&agrave;</th>
+                    <th>Subentro - Note</th>
+                    <th>Servizi - Severit&agrave;</th>
+                    <th>Servizi - Note</th>
+                    <th>Ultima Variazione</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>
