@@ -7,12 +7,4 @@ Error Example: EA001=wrong length of the ID recognisment string.
 Built with Javascript,PHP and CSS
 Virtual machine:Oracle Bitnami
 Requirements:PHPExcel
-Created by
- _____ _   __ _   _   _____                    
-|_   _| | / /| \ | | |_   _|                   
-  | | | |/ / |  \| |   | | ___  __ _ _ __ ___  
-  | | |    \ | . ` |   | |/ _ \/ _` | '_ ` _ \ 
-  | | | |\  \| |\  |   | |  __/ (_| | | | | | |
-  \_/ \_| \_/\_| \_/   \_/\___|\__,_|_| |_| |_|
-                                               
-                                               
+Created by TKNTeam
