@@ -4,7 +4,16 @@ ini_set('memory_limit', '16M');
 set_time_limit(0);
 require_once dirname(__FILE__) . '/classes/PHPExcel.php';
 
-file_put_contents("errors.xlsx", file_get_contents("https://www.anpr.interno.it/portale/documents/20182/26001/errori_anpr+28092017.xlsx/88075662-10c0-479e-8824-f00e5755e792"));
+$stream = file_get_contents("https://www.anpr.interno.it/portale/documents/20182/26001/errori_anpr+28092017.xlsx/88075662-10c0-479e-8824-f00e5755e792");
+
+// database is false if xlsx file is not found
+if ($stream === false) {
+	$database = false;
+	$array_data = array();
+} else {
+	$database = true;
+
+file_put_contents("errors.xlsx", $stream);
 
 $filename = "errors.xlsx";
 
@@ -67,4 +76,5 @@ foreach($rowIterator as $row){
 	}
 }
 
+}
 ?>

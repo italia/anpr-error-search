@@ -1,67 +1,138 @@
 <!DOCTYPE html>
-<html><head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-        <title>Fast Error Check</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <fieldset>
-            <legend>Ricerca Errore ANPR</legend>
-            <form id="errorCheck">
-                <div>
-                    <input id="codice" name="code" placeholder="Inserire qui il codice di errore" required="" autofocus="" type="text">
-                    <button type="submit">Cerca</button>
-                </div>
-            </form>
-            <br>
-            <div id="errore" hidden="">Errore: il codice cercato non è stato trovato</div>
-            <table id="out_table" hidden="">
-                <thead>
-                    <tr>
-                        <th>Codice Errore</th>
-                        <th>Descrizione</th>
-                        <th>Tabella Riferimento</th>
-                        <th>Subentro - Severità</th>
-                        <th>Subentro - Note</th>
-                        <th>Servizi - Severità</th>
-                        <th>Servizi - Note</th>
-                        <th>Ultima Variazione</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td id="code"></td>
-                        <td id="desc"></td>
-                        <td id="ref_table"></td>
-                        <td id="sub_severity"></td>
-                        <td id="sub_note"></td>
-                        <td id="serv_severity"></td>
-                        <td id="serv_note"></td>
-                        <td id="last_var"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </fieldset>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<title>Ricerca Errore ANPR</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<style>
+			@font-face {
+				font-family: "Titillium Web";
+				src: url(https://fonts.gstatic.com/s/titilliumweb/v5/7XUFZ5tgS-tD6QamInJTcSo_WB_cotcEMUw1LsIE8mM.woff2) format("woff2");
+			}
+			body {
+				font-family: "Titillium Web", sans-serif;
+				font-weight: normal;
+			}
+			fieldset {
+				border-color: #06c;
+				border-style: solid;
+			}
+			legend {
+				color: #404040;
+				font-size: 175%;
+				font-weight: 700;
+			}
+			#codice {
+				width: 270px;
+				height: 30px;
+				font-size: 115%;
+			}
+			button {
+				width: 80px;
+				height: 35px;
+				color: #004a4d;
+				background-color: #6ab0de;
+				font-size: 115%;
+				font-weight: 600;
+				text-transform: uppercase;
+
+			}
+			button:active, button.is-pressed {
+				color: #6ab0de;
+				background-color: #004a4d;
+				box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+
+			}
+			#out_table {
+				border: 2px solid #e1e4e5;
+				border-collapse: collapse;
+				max-width: 100%;
+				width: 100%;
+			}
+			#out_table > thead {
+				color: #000;
+				background-color: #e7f2fa;
+			}
+			th, td {
+				border-right: 1px solid #e1e4e5;
+				text-align: left;
+				height: 50px;
+				padding: 10px;
+				font-size: 90%;
+			}
+			#errore {
+				font-size: 125%;
+				color: red;
+			}
+		</style>
+	</head>
+	<body>
+		<fieldset>
+			<legend>Ricerca Errore ANPR</legend>
+			<form id="errorCheck">
+				<div>
+					<input id="codice" name="code" placeholder="Inserire qui il codice di errore" required="" autofocus="" type="text">
+					<button type="submit">Cerca</button>
+				</div>
+			</form>
+			<br>
+			<div id="errore" hidden="">Errore</div>
+			<table id="out_table" hidden="">
+				<thead>
+					<tr>
+						<th>Codice Errore</th>
+						<th>Descrizione</th>
+						<th>Tabella Riferimento</th>
+						<th>Subentro - Severità</th>
+						<th>Subentro - Note</th>
+						<th>Servizi - Severità</th>
+						<th>Servizi - Note</th>
+						<th>Ultima Variazione</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td id="code"></td>
+						<td id="desc"></td>
+						<td id="ref_table"></td>
+						<td id="sub_severity"></td>
+						<td id="sub_note"></td>
+						<td id="serv_severity"></td>
+						<td id="serv_note"></td>
+						<td id="last_var"></td>
+					</tr>
+				</tbody>
+			</table>
+		</fieldset>
 		<script>
-            document.getElementById("errorCheck").addEventListener('submit', function (event) {
-                event.preventDefault();
-                check();
-            });
-            async function check() {
-                var urlPHP = "http://130.162.71.133/anpr-error-search/search_error.php?code=" + document.getElementById("codice").value;
-                var response = await fetch(urlPHP);
-                var resp = await response.json();
-                if (resp.result == 1) {
-                    document.getElementById("out_table").hidden = 0;
-					document.getElementById("errore").hidden = 1;
-                    for (var item in resp.data) {
-                        document.getElementById(item).innerHTML = resp.data[item];
-                    }
-                } else {
-                    document.getElementById("out_table").hidden = 1;
+			document.getElementById("errorCheck").addEventListener('submit', function (event) {
+				event.preventDefault();
+				check();
+			});
+			async function check() {
+				var urlPHP = "http://130.162.71.133/anpr-error-search/search_error.php?code=" + document.getElementById("codice").value;
+				var response = await fetch(urlPHP);
+				var resp = await response.json();
+				if (resp.result == -1) {
+					document.getElementById("errore").innerHTML = 'Errore: Il database non è disponibile';
+					document.getElementById("out_table").hidden = 1;
 					document.getElementById("errore").hidden = 0;
-                }
-                return false;
-            }</script>
+				} else if (resp.result == 0) {
+					document.getElementById("errore").innerHTML = 'Errore: il codice cercato non è stato trovato';
+					document.getElementById("out_table").hidden = 1;
+					document.getElementById("errore").hidden = 0;
+				} else if (resp.result == 1) {
+					document.getElementById("out_table").hidden = 0;
+					document.getElementById("errore").hidden = 1;
+					for (var item in resp.data) {
+						if (item != "last_var") {
+							document.getElementById(item).innerHTML = resp.data[item];
+						} else {
+							document.getElementById(item).innerHTML = new Date((1499774672 + parseInt(resp.data[item]))*1000).toLocaleDateString();
+						}
+					}
+				}
+				return false;
+			}</script>
 </body></html>
